@@ -17,7 +17,6 @@ const app = express();
 let port;
 //settings
 app.set("port", config.port || 3000);
-
 // middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -115,7 +114,7 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error");
+  res.send(err.message); //I changed render to send
 });
 
 //module.exports = app;

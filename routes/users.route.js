@@ -5,13 +5,14 @@ import {
   addUser,
   getUserByName,
   deleteUser,
+  updateUserByName,
 } from "../controllers/users.controller";
 const router = Router();
 
 router.get("/users", getUsers);
+router.get("/users/:name", getUserByName);
 router.post("/users", addUser);
-router.get("/users/:uname", getUserByName);
 router.delete("/users/:name", deleteUser);
-//router.patch("/users:name",update)
+router.put("/users/:name", updateUserByName);
 
 export default router;

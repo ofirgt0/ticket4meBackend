@@ -15,8 +15,17 @@ Content-Type: application/json
 "picture":"bb77"
 }
 
-###
+### Getting a user 
 GET {{api}}/Shiri
 
-###
+### Deleting a user
 DELETE {{api}}/Shiri
+
+### Update user email and phone number
+PUT {{api}}/Shiri
+Content-Type: application/json
+
+{
+"userEmail":"Shula@gmail.com",
+"userPhone":"0525555555"
+}
