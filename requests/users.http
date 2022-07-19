@@ -19,7 +19,7 @@ Content-Type: application/json
 GET {{api}}/Shiri
 
 ### Deleting a user
-DELETE {{api}}/Shiri
+DELETE {{api}}/tali
 
 ### Update user email and phone number
 PUT {{api}}/Shiri

@@ -1,18 +1,19 @@
 import { VarChar } from "mssql";
 import { getConnection, sql } from "../core/db/dbConnection";
 import { queries } from "../core/db/queries";
-/*
-export const getUsers = (req, res) => {
-  res.send("Users!");
-};
-*/
+
+/*Users table*/
 export const getUsers = async (req, res) => {
   try {
     const pool = await getConnection(); // const pool = await sql.connect(dbsettings);
     const result = await pool.request().query(queries.getAllUsers);
-    console.log(`NUM OF USERS: ${result.recordset.length} `);
-    console.log(result.recordset);
-    res.json(result.recordset);
+    if (result.recordset.length === 0) {
+      res.send("Users table is empty.");
+    } else {
+      console.log(`NUM OF USERS: ${result.recordset.length} `);
+      console.log(result.recordset);
+      res.json(result.recordset);
+    }
   } catch (err) {
     res.status(500);
     res.send(err.message);
@@ -58,6 +59,7 @@ export const addUser = async (req, res) => {
       .query(queries.addNewUser);
 
     console.log("New user added successfully!");
+
     res.json({
       userName,
       userEmail,
@@ -72,7 +74,6 @@ export const addUser = async (req, res) => {
   }
 };
 
-//TODO : check if user exist
 export const getUserByName = async (req, res, next) => {
   const { name } = req.params;
   try {
@@ -97,10 +98,29 @@ export const getUserByName = async (req, res, next) => {
   }
 };
 
-//TODO : check if user exist
 export const deleteUser = async (req, res, next) => {
   const { name } = req.params;
-  console.log(name);
+
+  // check if the user we want to delete exists
+  try {
+    const pool = await getConnection();
+    const result = await pool
+      .request()
+      .input("userName", sql.VarChar, name)
+      .query(queries.getUser);
+
+    console.log(name);
+    if (!result.recordset[0]) {
+      console.log("Could not find this user.");
+      res.sendStatus(204); //No Content
+      return next();
+    }
+  } catch (err) {
+    res.status(500);
+    res.send(err.message);
+  }
+
+  // delete user
   try {
     const pool = await getConnection();
     const result = await pool
@@ -110,8 +130,7 @@ export const deleteUser = async (req, res, next) => {
 
     console.log(result);
     console.log("Delete User successfully!");
-    //res.send(name);
-    res.send(result);
+    res.send(`${name} was deleted successfully!`);
   } catch (err) {
     res.status(500);
     res.send(err.message);
@@ -121,13 +140,32 @@ export const deleteUser = async (req, res, next) => {
 export const updateUserByName = async (req, res, next) => {
   const { name } = req.params;
   const { userEmail, userPhone } = req.body;
-  console.log(JSON.stringify({ userEmail, userPhone }));
-  try {
-    if (userEmail == null || userPhone == null) {
-      console.log("NULL");
-      return res.status(400).json({ msg: "Please fill all fields" });
-    }
+  if (userEmail == null || userPhone == null) {
+    console.log("NULL");
+    return res.status(400).json({ msg: "Please fill all fields" });
+  }
 
+  // check if the user we want to update exists
+  try {
+    const pool = await getConnection();
+    const result = await pool
+      .request()
+      .input("userName", sql.VarChar, name)
+      .query(queries.getUser);
+
+    console.log(name);
+    if (!result.recordset[0]) {
+      console.log("Could not find this user.");
+      res.sendStatus(204); //No Content
+      return next();
+    }
+  } catch (err) {
+    res.status(500);
+    res.send(err.message);
+  }
+
+  // update user
+  try {
     const pool = await getConnection();
     const result = await pool
       .request()
@@ -139,8 +177,10 @@ export const updateUserByName = async (req, res, next) => {
     console.log(result);
     console.log("Update User successfully!");
     console.log(JSON.stringify({ userEmail, userPhone }));
-    //res.send("OK");
-    res.json({ userEmail, userPhone });
+    res.json({
+      message: `${name} was updated successfully!`,
+      user: { userEmail, userPhone },
+    });
   } catch (err) {
     res.status(500);
     res.send(err.message);
