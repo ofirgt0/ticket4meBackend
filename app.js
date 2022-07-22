@@ -11,18 +11,24 @@ var cors = require("cors");
 import express from "express";
 import config from "./config";
 
-import usersRoute from "./routes/users.route";
+import userRoute from "./routes/user-route";
+import usersRoute from "./routes/users-route";
+import usersVerifyRoute from "./routes/usersVerify-route";
 
 const app = express();
-let port;
+
 //settings
 app.set("port", config.port || 3000);
 // middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use(usersRoute);
+app.use('/user', userRoute);
+app.use('/users', usersRoute);
+app.use('/usersVerify', usersVerifyRoute);
+
 export default app;
+
 /*
 var corsOptions = {
   origin: "*",

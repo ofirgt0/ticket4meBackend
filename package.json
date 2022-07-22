@@ -24,6 +24,8 @@
     "morgan": "~1.9.1",
     "mssql": "^8.1.2",
     "mysql": "^2.18.1",
+    "swagger-jsdoc": "^6.2.1",
+    "swagger-ui-express": "^4.5.0",
     "validator": "^13.1.17"
   },
   "devDependencies": {

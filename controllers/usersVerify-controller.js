@@ -35,7 +35,7 @@ export const addVerification = async (req, res) => {
     }
 };
 
-export const checkVerificationByName = async (req, res, next) => {
+export const getVerificationByName = async (req, res, next) => {
     const { userName } = req.params;
     try {
         const pool = await getConnection();
@@ -71,7 +71,7 @@ export const updateVerification = async (req, res, next) => {
         const result = await pool
             .request()
             .input("userName", sql.VarChar, userName)
-            .query(queries.getUser);
+            .query(queries.getUserVerifyInfo);
 
         console.log(userName);
         if (!result.recordset[0]) {
@@ -106,10 +106,9 @@ export const updateVerification = async (req, res, next) => {
         res.status(500);
         res.send(err.message);
     }
-
 }
 
-export const removeVerification = async (req, res, next) => {
+export const deleteVerification = async (req, res, next) => {
     const { userName } = req.params;
 
     // check if the user we want to delete exists
@@ -118,7 +117,7 @@ export const removeVerification = async (req, res, next) => {
         const result = await pool
             .request()
             .input("userName", sql.VarChar, userName)
-            .query(queries.getUser);
+            .query(queries.getUserVerifyInfo);
 
         if (!result.recordset[0]) {
             console.log("Could not find this user.");
@@ -136,7 +135,7 @@ export const removeVerification = async (req, res, next) => {
         const result = await pool
             .request()
             .input("userName", sql.VarChar, userName)
-            .query(queries.removeUserInfo);
+            .query(queries.deleteUserInfo);
 
         console.log("Delete User successfully!");
         res.send(`${userName} was deleted successfully!`);

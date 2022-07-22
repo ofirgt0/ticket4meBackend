@@ -13,5 +13,5 @@ export const queries = {
     "INSERT INTO UsersVerify (userName,verifyEmailCode,verifyPhoneCode,emailCodeExpires,phoneCodeExpires) VALUES (@userName,@verifyEmailCode,@verifyPhoneCode,@emailCodeExpires,@phoneCodeExpires)",
   getUserVerifyInfo: "SELECT * FROM UsersVerify WHERE userName = @userName",
   updateVerifyInfo: "UPDATE UsersVerify SET verifyEmailCode=@verifyEmailCode, verifyPhoneCode=@verifyPhoneCode, emailCodeExpires=@emailCodeExpires, phoneCodeExpires=@phoneCodeExpires WHERE userName=@userName",
-  removeUserInfo: "DELETE FROM UsersVerify WHERE userName=@userName",
+  deleteUserInfo: "DELETE FROM UsersVerify WHERE userName=@userName",
 };
