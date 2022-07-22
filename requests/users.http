@@ -1,0 +1,31 @@
+@api = http://localhost:3003/users
+
+GET {{api}}
+
+###
+POST {{api}}
+Content-Type: application/json
+
+{
+"userName":"Shiri",
+"userEmail":"Shiri@gmail.com",
+"userPhone":"0525225956",
+"userPassword":"1333",
+"userPermission":"a555",
+"picture":"bb77"
+}
+
+### Getting a user 
+GET {{api}}/Shiri
+
+### Deleting a user
+DELETE {{api}}/tali
+
+### Update user email and phone number
+PUT {{api}}/Shiri
+Content-Type: application/json
+
+{
+"userEmail":"Shula@gmail.com",
+"userPhone":"0525555555"
+}
